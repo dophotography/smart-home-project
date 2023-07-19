@@ -1,0 +1,14 @@
+{
+  "name": "smart-home-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
+  }
+}
