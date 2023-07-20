@@ -1,4 +1,3 @@
-// smart-home.jsS
 class Alexa {
     constructor() {
         this.isOn = false
