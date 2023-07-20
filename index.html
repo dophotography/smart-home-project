@@ -1,22 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="dist/output.css">
-    <title>Smart House Control Panel</title>
-</head>
-<body>
 
-    <div class="container mx-auto px-4">
-        <a href="#" class="group block max-w-xs mx-auto rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
-            <div class="flex items-center space-x-3">
-                <h3 class="text-slate-900 group-hover:text-white text-sm font-semibold">New Project</h3>
-            </div>
-            <p class="text-slate-500 group-hover:text-white text-sm">Create a new project from a variety of starting templates.</p>
-        </a>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="dist/output.css">
+  <title>Smart House Control Panel</title>
+</head>
+
+<body class="bg-gray-200">
+
+  <div class="container mx-auto p-4">
+
+    <!-- TV -->
+    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+      <h2 class="text-lg font-semibold mb-2">TV</h2>
+      <div>
+        <button id="tv-toggle" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Toggle TV</button>
+        <label class="block mt-4 font-semibold">Channels:</label>
+        <select id="tvChannels" class="border rounded-lg px-4 py-2">
+          <option value="Channel 1">ICTV</option>
+          <option value="Channel 2">1+1</option>
+          <option value="Channel 3">Discovery Chanel</option>
+        </select>
+      </div>
     </div>
 
-    <script src="dist/js/main.js"></script>
+    <!-- Heating System -->
+    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+      <h2 class="text-lg font-semibold mb-2">Heating System</h2>
+      <div>
+        <input id="heatingSlider" type="range" min="10" max="30" step="1" value="20" class="w-full" />
+        <p class="mt-2 font-semibold">Current Temperature: <span id="heating-temp">20°C</span></p>
+      </div>
+    </div>
+
+    <!-- Lights -->
+    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+      <h2 class="text-lg font-semibold mb-2">Lights</h2>
+      <div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input id="lightsToggle" type="checkbox" value="" class="sr-only peer">
+          <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+          <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle me</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Alexa -->
+    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+      <h2 class="text-lg font-semibold mb-2">Alexa</h2>
+      <div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input id="alexaToggle" type="checkbox" value="" class="sr-only peer">
+          <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+          <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle me</span>
+        </label>
+      </div>
+    </div>
+
+    <script type="module" src="dist/js/app.js"></script>
 </body>
+
 </html>
