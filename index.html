@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="dist/output.css">
   <title>Smart House Control Panel</title>
+  <link rel="shortcut icon" href="favicon.png">
 </head>
 
 <body>
@@ -742,10 +743,63 @@
     <!-- Main content -->
     <main class="p-4 md:ml-64 h-auto pt-20 mt-4">
 
-      <!-- Four buckets -->
+      <!-- First bucket -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
 
         <div class="bg-white p-4 rounded-lg shadow-lg h-32 md:h-64">
+          <h2 class="text-lg font-semibold mb-2">Lights</h2>
+          <div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input id="lampToggle" type="checkbox" value="" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle me</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Big bucket -->
+      <div class="bg-white p-4 rounded-lg shadow-lg h-112 mb-4">
+
+        <div class="mx-auto flex flex-col mt-2">
+
+          <div class="flex flex-col items-center">
+            <h2 class="text-2xl text-gray-900 font-bold mb-2">Music Player</h2>
+
+            <div class="" id="songCover">
+              <img class="h-32 rounded-xl w-32" src="http://localhost:3000/player/default-cover.png" alt="Default cover">
+            </div>
+
+            <div class="text-gray-900 mt-2 flex flex-col items-center">
+              <p id="songTitle"></p>
+              <strong><p id="songArtist"></p></strong>
+            </div>
+
+            <audio id="audioPlayer" class="flex items-center" controls>
+              <source id="audioSource" src="http://localhost:3000/player/track1.mp3" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+
+            <label class="mt-2" for="#">Choose the song:</label>
+            <select id="songSelect" class="border mr-2 ml-2 rounded-lg py-2">
+            </select>
+          </div>
+
+          <div class="flex flex-row justify-between mt-4 mr-8 ml-8 mb-2">
+            <button id="prevButton" class="btn px-4 py-2 w-25 bg-purple-500 text-white rounded">Previous</button>
+            <!-- <button id="playButton" class="btn mr-2 px-4 py-2 bg-blue-500 text-white rounded">Play</button>
+            <button id="pauseButton" class="btn mr-2 px-4 py-2 bg-red-500 text-white rounded">Pause</button> -->
+            <button id="nextButton" class="btn px-4 py-2 w-25 bg-purple-500 text-white rounded">Next</button>
+          </div>
+          
+        </div>
+      </div>
+
+      <!-- Four buckets -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+
+        <div class="bg-white p-4 rounded-lg shadow-lg md:h-64">
           <h2 class="text-lg font-semibold mb-2">TV</h2>
           <div>
             <label class="relative inline-flex items-center cursor-pointer">
@@ -767,7 +821,7 @@
           <h2 class="text-lg font-semibold mb-2">Heating System</h2>
           <div>
             <input id="heatingSlider" type="range" min="10" max="30" step="1" value="20" class="w-full" />
-            <p class="mt-2 font-semibold">Current Temperature: <span id="heating-temp">20°C</span></p>
+            <p class="mt-2 font-semibold">Current Temperature: <span id="heatingTemp">20°C</span></p>
           </div>
         </div>
 
@@ -806,22 +860,13 @@
         <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
       </div>
 
-      <!-- Big bucket -->
-      <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-96 mb-4"></div>
-
-      <!-- Four buckets -->
-      <div class="grid grid-cols-2 gap-4">
-        <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-        <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-        <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-        <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-      </div>
 
     </main>
 
   </div>
 
-  <script type="module" src="dist/components/app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+  <script type="module" src="src/components/app.js"></script>
 </body>
 
 </html>
