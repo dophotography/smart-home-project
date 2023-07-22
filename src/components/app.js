@@ -42,7 +42,7 @@ lampToggle.onclick = () => {
 heatingSlider.addEventListener('input', (event) => {
     const temperature = parseInt(event.target.value)
     heatingSystem.setTemperature(temperature)
-    document.getElementById('heatingTemp').textContent = `${temperature}°C`
+    heatingTemp.textContent = `${temperature}°C`
     localStorage.setItem('heatingState', JSON.stringify(heatingSystem))
 })
 
