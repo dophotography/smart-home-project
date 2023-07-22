@@ -47,22 +47,23 @@ heatingSlider.addEventListener('input', (event) => {
 })
 
 prevButton.onclick = () => {
-    audioPlayer.playPreviousSong()
+    setTimeout(() => audioPlayer.playPreviousSong(), 1000)
 }
 
 nextButton.onclick = () => {
-    audioPlayer.playNextSong()
+    setTimeout(() => audioPlayer.playNextSong(), 1000)
 }
 
 songSelect.addEventListener('change', () => {
-    audioPlayer.playSelectedSong()
     audioPlayer.showSongTags()
+    setTimeout(() => audioPlayer.playSelectedSong(), 1000)
     localStorage.setItem('audioPlayerState', JSON.stringify(audioPlayer))
 })
 
 window.addEventListener('load', () => {
     audioPlayer.showSongTags()
-
+    setTimeout(() => audioPlayer.updateSelectedSong(), 1000)
+    
     const savedTvState = localStorage.getItem('tvState')
     if (savedTvState) {
       const tvState = JSON.parse(savedTvState)

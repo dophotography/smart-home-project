@@ -42,7 +42,7 @@ class AudioPlayer {
         }
       }
     }
-
+    
     showSongTags() {
         const song = `https://audio-base-api.vercel.app/player/${this.playlist[this.selectedSongIndex]}`
         const jsmediatags = window.jsmediatags
@@ -88,6 +88,7 @@ class AudioPlayer {
         console.log(this.selectedSongIndex)
         this.updateSelectedSong()
     }
+
 
     updateSelectedSong() {
         songSelect.value = this.selectedSongIndex
