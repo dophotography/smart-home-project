@@ -1,6 +1,7 @@
 // app.js
 import { Lights, HeatingSystem, Lamp, TV, Alexa, SmartHome } from './smart-elements.js';
 import { AudioPlayer } from './player.js'
+import { Weather } from './weather.js'
 
 const lamp = new Lamp()
 const alexa = new Alexa()
@@ -8,6 +9,7 @@ const tv = new TV()
 const heatingSystem = new HeatingSystem()
 const lights = new Lights()
 const audioPlayer = new AudioPlayer()
+const weather = new Weather()
 
 const smartHome = new SmartHome()
 
@@ -17,6 +19,9 @@ smartHome.addComponent('lights', lights)
 smartHome.addComponent('tv', tv)
 smartHome.addComponent('heating', heatingSystem)
 smartHome.addComponent('player', audioPlayer)
+smartHome.addComponent('weather', weather)
+
+weather.showTheWeather() 
 
 lightsToggle.onclick = () => {
     lights.toggle()

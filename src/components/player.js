@@ -13,7 +13,7 @@ class AudioPlayer {
   
     populateSongList() {
         const jsmediatags = window.jsmediatags
-        this.playlist.forEach((songPath, index) => {
+        this.playlist.forEach(async (songPath, index) => {
             const song = `https://audio-base-api.vercel.app/player/${this.playlist[index]}`
             const option = document.createElement('option')
             option.value = index
@@ -38,7 +38,7 @@ class AudioPlayer {
         audioPlayer.src = `https://audio-base-api.vercel.app/player/${this.playlist[this.selectedSongIndex]}`
         const playPromise = audioPlayer.play()
         if (playPromise !== null) {
-            playPromise.catch(() => { audioPlayer.play() })
+            playPromise.catch(() => { })
         }
       }
     }
@@ -76,7 +76,6 @@ class AudioPlayer {
     playPreviousSong() {
         this.selectedSongIndex = (this.selectedSongIndex - 1 + this.playlist.length) % this.playlist.length
 
-        console.log(this.selectedSongIndex)
         this.updateSelectedSong();
       }
     
@@ -85,7 +84,6 @@ class AudioPlayer {
             this.selectedSongIndex = 0 :
             this.selectedSongIndex++
 
-        console.log(this.selectedSongIndex)
         this.updateSelectedSong()
     }
 
