@@ -85,8 +85,7 @@ class TV {
     }
 
     updateUI() {
-        // Update the TV UI elements based on the state of the TV
-        // ...
+        
     }
 }
   
@@ -119,13 +118,12 @@ class HeatingSystem {
     }
 
     updateUI() {
-        // Update the Heating System UI elements based on the temperature
-        // ...
+      
     }
 }
 
   
-  // Implement other component classes (Blinds, Alarm, etc.) similarly...
+  //Alarm
   
 class SmartHome {
     constructor() {
