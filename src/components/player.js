@@ -13,7 +13,7 @@ class AudioPlayer {
   
     populateSongList() {
         const jsmediatags = window.jsmediatags
-        this.playlist.forEach(async (songPath, index) => {
+        this.playlist.forEach((songPath, index) => {
             const song = `https://audio-base-api.vercel.app/player/${this.playlist[index]}`
             const option = document.createElement('option')
             option.value = index

@@ -34,7 +34,8 @@
             <span class="sr-only">Toggle sidebar</span>
           </button>
           <a href="https://flowbite.com" class="flex items-center justify-between mr-4">
-            <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1660832060122/RA6O44cVF.jpg" class="mr-3 h-8" alt="Flowbite Logo" />
+            <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1660832060122/RA6O44cVF.jpg" class="mr-3 h-8"
+              alt="Flowbite Logo" />
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Smart Home</span>
           </a>
           <form action="#" method="GET" class="hidden md:block md:pl-2">
@@ -370,7 +371,8 @@
             id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
             <span class="sr-only">Open user menu</span>
             <img class="w-8 h-8 rounded-full"
-              src="https://media.defense.gov/2020/Feb/19/2002251686/700/465/0/200219-A-QY194-002.JPG" alt="user photo" />
+              src="https://media.defense.gov/2020/Feb/19/2002251686/700/465/0/200219-A-QY194-002.JPG"
+              alt="user photo" />
           </button>
           <!-- Dropdown menu -->
           <div
@@ -691,19 +693,21 @@
 
       <!-- Big bucket -->
       <div class="bg-white p-4 rounded-lg shadow-lg h-112 mb-4">
-
         <div class="mx-auto flex flex-col mt-2">
 
           <div class="flex flex-col items-center">
             <h2 class="text-2xl text-gray-900 font-bold mb-2">Music Player</h2>
 
             <div class="" id="songCover">
-              <img class="h-32 rounded-xl w-32" src="https://audio-base-api.vercel.app/player/default-cover.png" alt="Default cover">
+              <img class="h-32 rounded-xl w-32" src="https://audio-base-api.vercel.app/player/default-cover.png"
+                alt="Default cover">
             </div>
 
             <div class="text-gray-900 mt-2 flex flex-col items-center">
               <p id="songTitle"></p>
-              <strong><p id="songArtist"></p></strong>
+              <strong>
+                <p id="songArtist"></p>
+              </strong>
             </div>
 
             <audio id="audioPlayer" class="flex items-center" controls>
@@ -722,7 +726,7 @@
             <button id="pauseButton" class="btn mr-2 px-4 py-2 bg-red-500 text-white rounded">Pause</button> -->
             <button id="nextButton" class="btn px-4 py-2 w-25 bg-purple-500 text-white rounded">Next</button>
           </div>
-          
+
         </div>
       </div>
 
@@ -734,7 +738,9 @@
           <div>
             <label class="relative inline-flex items-center cursor-pointer">
               <input id="tvToggle" type="checkbox" value="" class="sr-only peer">
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              <div
+                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+              </div>
               <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">TV</span>
             </label>
             <label class="block mt-4 font-semibold">Channels:</label>
@@ -759,7 +765,9 @@
           <div>
             <label class="relative inline-flex items-center cursor-pointer">
               <input id="lightsToggle" type="checkbox" value="" class="sr-only peer">
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              <div
+                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+              </div>
               <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle lights</span>
             </label>
           </div>
@@ -770,12 +778,46 @@
           <div>
             <label class="relative inline-flex items-center cursor-pointer">
               <input id="alexaToggle" type="checkbox" value="" class="sr-only peer">
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              <div
+                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+              </div>
               <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle Alexa</span>
             </label>
           </div>
         </div>
 
+      </div>
+
+      <!-- Big bucket -->
+      <div class="bg-white p-4 rounded-lg shadow-lg h-112 mb-4">
+        <div class="mx-auto flex flex-col mt-2">
+
+          <div class="flex flex-col items-center">
+
+            <div class="text-gray-900 mt-2 flex flex-col items-center">
+              <h3 class="text-lg text-gray-900 font-semibold mb-2">Weather</h3>
+              <div class="flex flex-col items-center">
+                <span id="cityContainer" class="text-md text-gray-900 font-medium mb-1"></span>
+                <div class="flex flex-row gap-3">
+                  <div class="mx-5" id="iconContainer"></div>        
+                  <div class="mx-5">
+                    <div class="degree">
+                      <span class="text-gray-900 text-2xl font-bold" id="tempContainer"></span>
+                      <span class="text-gray-900 text-2xl font-bold">°C</span>
+                    </div>
+                    <div class="params flex flex-col">
+                      <span>Humidity: <strong id="humidityContainer"></strong>%</span>
+                      <span>Wind Speed: <strong id="windContainer"></strong> m/s</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
       </div>
 
       <!-- First bucket -->
@@ -786,28 +828,27 @@
           <div>
             <label class="relative inline-flex items-center cursor-pointer">
               <input id="lampToggle" type="checkbox" value="" class="sr-only peer">
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              <div
+                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+              </div>
               <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Lamp</span>
             </label>
           </div>
         </div>
 
         <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
-          
+
         </div>
 
         <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
-          
+
         </div>
 
         <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
-          
+
         </div>
 
       </div>
-
-      <!-- Big bucket -->
-      <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-96 mb-4"></div>
 
       <!-- Four buckets -->
       <div class="grid grid-cols-2 gap-4 mb-4">

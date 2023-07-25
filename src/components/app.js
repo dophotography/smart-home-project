@@ -3,6 +3,8 @@ import { Lights, HeatingSystem, Lamp, TV, Alexa, SmartHome } from './smart-eleme
 import { AudioPlayer } from './player.js'
 import { Weather } from './weather.js'
 
+
+
 const lamp = new Lamp()
 const alexa = new Alexa()
 const tv = new TV()
@@ -21,7 +23,7 @@ smartHome.addComponent('heating', heatingSystem)
 smartHome.addComponent('player', audioPlayer)
 smartHome.addComponent('weather', weather)
 
-weather.showTheWeather() 
+weather.getWeatherData()
 
 lightsToggle.onclick = () => {
     lights.toggle()
@@ -66,6 +68,7 @@ songSelect.addEventListener('change', () => {
 })
 
 window.addEventListener('load', () => {
+
     audioPlayer.showSongTags()
     setTimeout(() => audioPlayer.updateSelectedSong(), 1000)
     
