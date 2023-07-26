@@ -2,8 +2,11 @@
 import { Lights, HeatingSystem, Lamp, TV, Alexa, SmartHome } from './smart-elements.js';
 import { AudioPlayer } from './player.js'
 import { Weather } from './weather.js'
+import { Burger } from './burger.js'
+import { Modal } from './modal.js'
 
-
+const burger = new Burger()
+const modal = new Modal()
 
 const lamp = new Lamp()
 const alexa = new Alexa()
@@ -66,6 +69,11 @@ songSelect.addEventListener('change', () => {
     setTimeout(() => audioPlayer.playSelectedSong(), 1000)
     localStorage.setItem('audioPlayerState', JSON.stringify(audioPlayer))
 })
+
+burger.burgerWork()
+
+modal.showLoginModal()
+
 
 window.addEventListener('load', () => {
 
