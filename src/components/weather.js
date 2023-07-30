@@ -44,6 +44,7 @@ class Weather {
 
         const icon = document.createElement('img')
         icon.src = `https://openweathermap.org/img/wn/${this.weatherData.weatherIcon}@2x.png`
+        icon.classList.add('contrast-150')
         iconContainer.appendChild(icon)
     }
       

@@ -1,75 +1,49 @@
+import { AuthContract } from './contract/auth-contract.js'
+
+
 class Modal {
-    constructor() {
-        this.loginModal = loginModal
-        this.loginCloseModal = loginCloseModal
-
-        this.registerModal = registerModal
-        this.registerCloseModal = registerCloseModal
-
-        this.createAccount = createAccount
-        this.signIn = signIn
-
-        this.loginForm = loginForm
-        this.registerForm = registerForm
-
-        this.login = false
+    constructor(abi) {
+        this.authModal = authModal
+        this.authContract = new AuthContract(abi)
+        this.connectionStatus = connectionStatus
+        this.openModal = openModal
+        this.houseName = houseName
         this.body = body
-        this.userBtn = userBtn
+        this.authCloseModal = authCloseModal
+        this.connectWallet = connectWallet
+        this.changeHouseName = changeHouseName
+        this.shTitle = shTitle
     }
 
-    showLoginModal() {
-        this.userBtn.onclick = () => {
-            this.loginModal.classList.remove('hidden')
+    showAuthModal() {
+        this.openModal.onclick = () => {
+            this.authModal.classList.remove('hidden')
             this.body.classList.add('position-fixed')
 
-            this.loginCloseModal.onclick = () => {
-                this.loginModal.classList.add('hidden')
+            this.authCloseModal.onclick = () => {
+                this.authModal.classList.add('hidden')
                 this.body.classList.remove('position-fixed')
             }
 
-            this.createAccount.onclick = () => {
-                this.removeRequiredAttribute(this.loginForm)
+            this.connectWallet.onclick = () => {
+                if(this.authContract.isUserLoggedIn()) {
+                    this.authContract.connectWallet()
+                    this.connectionStatus.textContent = 'Connected'
 
-                this.loginModal.classList.add('hidden')
-
-                this.registerModal.classList.remove('hidden')
+                    this.authModal.classList.add('hidden')
+                    this.body.classList.remove('position-fixed')
+                } else {
+                    alert('Connect the wallet')
+                }
             }
 
-            this.showRegisterModal()
-        }
-    }
-
-    showRegisterModal() {
-        this.createAccount.onclick = () => {
-            this.removeRequiredAttribute(this.loginForm)
-
-            this.loginModal.classList.add('hidden')
-
-            this.registerModal.classList.remove('hidden')
-
-            this.registerCloseModal.onclick = () => {
-                this.registerModal.classList.add('hidden')
-                this.body.classList.remove('position-fixed')
-            }
-
-
-            this.signIn.onclick = () => {
-                this.removeRequiredAttribute(this.registerForm)
-
-                this.registerModal.classList.add('hidden')
-
-                this.loginModal.classList.remove('hidden')
+            this.changeHouseName.onclick = () => {
+                this.authContract.changeHouseName(this.houseName.value)
+                this.authContract.showHouseName()
             }
         }
     }
 
-    removeRequiredAttribute(enteredForm) {
-        const inputFields = enteredForm.querySelectorAll('input')
-
-        inputFields.forEach(inputField => {
-          inputField.removeAttribute('required');
-        })
-    }
 }
 
 export { Modal }

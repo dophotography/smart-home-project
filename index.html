@@ -5,22 +5,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="dist/output.css">
+  <link rel="shortcut icon" href="dist/favicon.png">
   <title>Smart House Control Panel</title>
-  <link rel="shortcut icon" href="favicon.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.0.1/web3.min.js"></script>
 </head>
 
 <body>
 
-  <!-- Modal Login menu -->
-  <div id="loginModal" tabindex="-1" aria-hidden="true"
-    class="fixed top-0 left-0 hidden right-0 z-50 overflow-x-hidden w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full shadow-2xl shadow-black ">
+  <!-- Modal wallet connect -->
+    <div id="authModal" tabindex="-1" aria-hidden="true"
+    class="fixed top-0 left-0 hidden right-0 z-50 overflow-x-hidden w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full shadow-2xl shadow-black">
     <div class="relative w-full max-w-md max-h-full mx-auto">
       <!-- Modal content -->
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 md:overflow-hidden md:max-h-[90vh]">
 
-        <button id="loginCloseModal" type="button"
+        <button id="authCloseModal" type="button"
           class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-hide="loginModal">
+          data-modal-hide="authModal">
           <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
@@ -28,653 +29,847 @@
           <span class="sr-only">Close modal</span>
         </button>
 
-        <div class="px-6 py-6 lg:px-8">
-          <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
-          <form id="loginForm" class="space-y-6" action="#">
-            <div>
-              <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
-                email</label>
-              <input type="email" name="email" id="emailLogin"
+        <div class="px-8 py-8 lg:px-8">
+          <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Connect yout wallet</h3>
+          <button type="submit" id="connectWallet"
+              class="w-full mb-4 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700">
+              Connect Wallet
+          </button>
+          <button type="submit" id="changeHouseName"
+              class="w-full mb-4 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700">
+              Change House Name
+          </button>
+          <input type="text" name="house-name" id="houseName"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                placeholder="name@company.com" required>
-            </div>
-            <div>
-              <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
-                password</label>
-              <input type="password" name="password" id="passwordLogin" placeholder="••••••••"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                required>
-            </div>
-            <div class="flex justify-between">
-              <div class="flex items-start">
-                <div class="flex items-center h-5">
-                  <input id="remember" type="checkbox" value=""
-                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                    required>
-                </div>
-                <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember
-                  me</label>
-              </div>
-              <a href="#" class="text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</a>
-            </div>
-            <button type="submit"
-              class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login
-              to your account</button>
-            <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-              Not registered? <button id="createAccount" class="text-blue-700 hover:underline dark:text-blue-500">Create
-                account</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Register menu -->
-  <div id="registerModal" tabindex="-1" aria-hidden="true"
-    class="fixed top-0 left-0 hidden right-0 z-50 overflow-x-hidden w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full shadow-2xl shadow-black ">
-    <div class="relative w-full max-w-md max-h-full mx-auto">
-      <!-- Modal content -->
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 md:overflow-hidden md:max-h-[90vh]">
-
-        <button id="registerCloseModal" type="button"
-          class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-hide="registerModal">
-          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-          </svg>
-          <span class="sr-only">Close modal</span>
-        </button>
-
-        <div class="px-6 py-6 lg:px-8">
-          <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create your account</h3>
-          <form id="registerForm" class="space-y-6" action="#">
-            <div>
-              <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
-                username</label>
-              <input type="username" name="username" id="usernameSignUp"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                placeholder="username1998" required>
-            </div>
-            <div>
-              <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
-                email</label>
-              <input type="email" name="email" id="emailSignUp"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                placeholder="name@company.com" required>
-            </div>
-            <div>
-              <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
-                password</label>
-              <input type="password" name="password" id="passwordSignUp" placeholder="••••••••"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                required>
-            </div>
-            <div>
-              <label for="passwordConfirm" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm
-                your password</label>
-              <input type="passwordConfirm" name="passwordConfirm" id="passwordConfirmSignUp" placeholder="••••••••"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                required>
-            </div>
-            <div class="flex justify-between">
-              <div class="flex items-start">
-                <div class="flex items-center h-5">
-                  <input id="policy" type="checkbox" value=""
-                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                    required>
-                </div>
-                <label for="policy" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I accept the user
-                  policy</label>
-              </div>
-            </div>
-            <button type="submit"
-              class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create your account</button>
-            <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-              Already have an acoount?
-              <button id="signIn" class="text-blue-700 hover:underline dark:text-blue-500">Sign in</button>
-            </div>
-          </form>
+                placeholder="Enter your house name">
         </div>
       </div>
     </div>
   </div>
 
   <div id="body" class="antialiased bg-gray-50 dark:bg-gray-900">
-    <nav
-      class="bg-white border-b border-gray-200 px-2 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50 sm:px-6 ">
-      <div class="flex flex-wrap justify-between  items-center">
-
-        <!-- Logo, search, burger button (mobile) -->
-        <div class="flex justify-start items-center">
-
-          <button id="burgerBtn" data-drawer-target="drawer-navigation" data-drawer-toggle="drawer-navigation"
-            aria-controls="drawer-navigation"
-            class="p-2 mr-1 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                clip-rule="evenodd"></path>
-            </svg>
-            <svg aria-hidden="true" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clip-rule="evenodd"></path>
-            </svg>
-            <span class="sr-only">Toggle sidebar</span>
-          </button>
-
-          <a href="#" class="flex items-center justify-between">
-            <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1660832060122/RA6O44cVF.jpg"
-              class="mr-1 sm:mr-2 h-8" alt="Flowbite Logo" />
-            <span class="self-center text-xl sm:mr-2 font-semibold whitespace-nowrap dark:text-white">Smart Home</span>
-          </a>
-
-          <form action="#" method="GET" class="hidden md:block md:pl-2">
-            <label for="topbar-search" class="sr-only">Search</label>
-            <div class="relative md:w-96">
-              <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z">
-                  </path>
-                </svg>
-              </div>
-              <input type="text" name="email" id="topbar-search"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Search" />
-            </div>
-          </form>
-
-        </div>
-
-        <!-- Avatar(modal), search -->
-        <div class="flex items-center lg:order-2">
-
-          <!-- Search button (mobile) -->
-          <button type="button" data-drawer-toggle="drawer-navigation" aria-controls="drawer-navigation"
-            class="p-2 mr-1 text-gray-500 rounded-lg md:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
-            <span class="sr-only">Toggle search</span>
-            <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path clip-rule="evenodd" fill-rule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z">
-              </path>
-            </svg>
-          </button>
-
-          <!-- Avatar Modal -->
-          <button type="button"
-            class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-            id="userBtn" aria-expanded="false" data-modal-target="loginModal" data-modal-toggle="loginModal">
-            <span class="sr-only">Open user menu</span>
-            <img class="w-8 h-8 rounded-full"
-              src="https://media.defense.gov/2020/Feb/19/2002251686/700/465/0/200219-A-QY194-002.JPG"
-              alt="user photo" />
-          </button>
-
-
-
-        </div>
-
-      </div>
-    </nav>
-
-    <!-- Sidebar -->
-    <aside
-      class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 sm transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-      aria-label="Sidenav" id="drawerNavigation">
-
-      <!-- Sidebar menu -->
-      <div class="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
-
-        <!-- First module -->
-        <ul class="space-y-2">
-
-          <li>
-            <a href="#"
-              class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-              <svg aria-hidden="true"
-                class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-              </svg>
-              <span class="ml-3">Overview</span>
-            </a>
-          </li>
-
-          <li>
-
-            <button type="button"
-              class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              aria-controls="dropdown-pages" data-collapse-toggle="dropdown-pages">
-              <svg aria-hidden="true"
-                class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd"
-                  d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="flex-1 ml-3 text-left whitespace-nowrap">Pages</span>
+    <!-- Navigation -->
+      <nav
+        class="bg-white border-b border-gray-200 px-2 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50 sm:px-6 ">
+        <div class="flex flex-wrap justify-between  items-center">
+  
+          <!-- Logo, search, burger button (mobile) -->
+          <div class="flex justify-start items-center">
+  
+            <button id="burgerBtn" data-drawer-target="drawer-navigation" data-drawer-toggle="drawer-navigation"
+              aria-controls="drawer-navigation"
+              class="p-2 mr-1 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
               <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                   clip-rule="evenodd"></path>
+              </svg>
+              <svg aria-hidden="true" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              <span class="sr-only">Toggle sidebar</span>
+            </button>
+  
+            <button id="logoBtn" class="flex items-center justify-between">
+              <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1660832060122/RA6O44cVF.jpg"
+                class="mr-1 sm:mr-2 h-8" alt="Flowbite Logo" />
+              <span class="self-center text-xl sm:mr-2 font-semibold whitespace-nowrap dark:text-white">Smart Home</span>
+            </button>
+  
+            <form action="#" method="GET" class="hidden md:block md:pl-2">
+              <label for="topbar-search" class="sr-only">Search</label>
+              <div class="relative md:w-96">
+                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                  <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z">
+                    </path>
+                  </svg>
+                </div>
+                <input type="text" name="email" id="topbar-search"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Search" />
+              </div>
+            </form>
+  
+          </div>
+  
+          <!-- House name(modal), search -->
+          <div class="flex items-center lg:order-2">
+  
+            <div class="mr-4">
+              <span id="connectionStatus">Disconnected</span>
+            </div>
+  
+            <!-- Search button (mobile) -->
+            <button type="button" data-drawer-toggle="drawer-navigation" aria-controls="drawer-navigation"
+              class="p-2 mr-1 text-gray-500 rounded-lg md:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
+              <span class="sr-only">Toggle search</span>
+              <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path clip-rule="evenodd" fill-rule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z">
+                </path>
               </svg>
             </button>
-
-            <ul id="dropdown-pages" class="hidden py-2 space-y-2">
-              <li>
-                <a href="#"
-                  class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Settings</a>
-              </li>
-              <li>
-                <a href="#"
-                  class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Kanban</a>
-              </li>
-              <li>
-                <a href="#"
-                  class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Calendar</a>
-              </li>
-            </ul>
-
-          </li>
-
-
-        </ul>
-
-        <!-- Second module -->
-        <ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
-
-          <li>
-            <a href="#"
-              class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
-              <svg aria-hidden="true"
-                class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                <path fill-rule="evenodd"
-                  d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              <span class="ml-3">Docs</span>
-            </a>
-          </li>
-
-        </ul>
-
-      </div>
-
-      <!-- Sidebar footer -->
-      <div
-        class="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20">
-
-        <a href="#"
-          class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
-          <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z">
-            </path>
-          </svg>
-        </a>
-
-        <a href="#" data-tooltip-target="tooltip-settings"
-          class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 dark:hover:text-white hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600">
-          <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd"
-              d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-              clip-rule="evenodd"></path>
-          </svg>
-        </a>
-
-        <div id="tooltip-settings" role="tooltip"
-          class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip">
-          Settings page
-          <div class="tooltip-arrow" data-popper-arrow></div>
+  
+            <!-- Housename Modal -->
+            <button type="button"
+              class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+              id="openModal" aria-expanded="false" data-modal-target="loginModal" data-modal-toggle="loginModal">
+              <span class="sr-only">Open user menu</span>
+              <img class="w-8 h-8 rounded-full" id="avatarImage"
+                src="https://media.defense.gov/2020/Feb/19/2002251686/700/465/0/200219-A-QY194-002.JPG"
+                alt="user photo" />
+            </button>
+  
+  
+  
+          </div>
+  
         </div>
-
-        <button type="button" data-dropdown-toggle="language-dropdown"
-          class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:hover:text-white dark:text-gray-400 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600">
-          <!-- <svg aria-hidden="true" class="h-5 w-5 rounded-full mt-0.5" xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 3900 3900">
-            <path fill="#b22234" d="M0 0h7410v3900H0z" />
-            <path d="M0 450h7410m0 600H0m0 600h7410m0 600H0m0 600h7410m0 600H0" stroke="#fff" stroke-width="300" />
-            <path fill="#3c3b6e" d="M0 0h2964v2100H0z" />
-            <g fill="#fff">
-              <g id="d">
-                <g id="c">
-                  <g id="e">
-                    <g id="b">
-                      <path id="a" d="M247 90l70.534 217.082-184.66-134.164h228.253L176.466 307.082z" />
-                      <use xlink:href="#a" y="420" />
-                      <use xlink:href="#a" y="840" />
-                      <use xlink:href="#a" y="1260" />
-                    </g>
-                    <use xlink:href="#a" y="1680" />
-                  </g>
-                  <use xlink:href="#b" x="247" y="210" />
-                </g>
-                <use xlink:href="#c" x="494" />
-              </g>
-              <use xlink:href="#d" x="988" />
-              <use xlink:href="#c" x="1976" />
-              <use xlink:href="#e" x="2470" />
-            </g>
-          </svg> -->
-        </button>
-
-        <!-- Dropdown -->
-        <div
-          class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
-          id="language-dropdown">
-          <ul class="py-1" role="none">
+      </nav>
+  
+      <!-- Sidebar -->
+      <aside
+        class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 sm transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+        aria-label="Sidenav" id="drawerNavigation">
+  
+        <!-- Sidebar menu -->
+        <div class="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
+  
+          <!-- First module -->
+          <ul class="space-y-2">
+  
             <li>
-              <a href="#"
-                class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:text-white dark:text-gray-300 dark:hover:bg-gray-600"
-                role="menuitem">
-                <div class="inline-flex items-center">
-                  <svg aria-hidden="true" class="h-3.5 w-3.5 rounded-full mr-2" xmlns="http://www.w3.org/2000/svg"
-                    id="flag-icon-css-us" viewBox="0 0 512 512">
-                    <g fill-rule="evenodd">
-                      <g stroke-width="1pt">
-                        <path fill="#bd3d44"
-                          d="M0 0h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
-                          transform="scale(3.9385)" />
-                        <path fill="#fff"
-                          d="M0 10h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
-                          transform="scale(3.9385)" />
-                      </g>
-                      <path fill="#192f5d" d="M0 0h98.8v70H0z" transform="scale(3.9385)" />
-                      <path fill="#fff"
-                        d="M8.2 3l1 2.8H12L9.7 7.5l.9 2.7-2.4-1.7L6 10.2l.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7L74 8.5l-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 7.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 24.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 21.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 38.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 35.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 52.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 49.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm-74.1 7l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7H65zm16.4 0l1 2.8H86l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm-74 7l.8 2.8h3l-2.4 1.7.9 2.7-2.4-1.7L6 66.2l.9-2.7-2.4-1.7h3zm16.4 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8H45l-2.4 1.7 1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9zm16.4 0l1 2.8h2.8l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h3zm16.5 0l.9 2.8h2.9l-2.3 1.7.9 2.7-2.4-1.7-2.3 1.7.9-2.7-2.4-1.7h2.9zm16.5 0l.9 2.8h2.9L92 63.5l1 2.7-2.4-1.7-2.4 1.7 1-2.7-2.4-1.7h2.9z"
-                        transform="scale(3.9385)" />
-                    </g>
-                  </svg>
-                  English (US)
-                </div>
-              </a>
+              <button id="dashboardBtn"
+                class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <svg aria-hidden="true"
+                  class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                </svg>
+                <span class="ml-3">Dashboard</span>
+              </button>
             </li>
-            <li>
-              <a href="#"
-                class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-600"
-                role="menuitem">
-                <div class="inline-flex items-center">
-                  <svg aria-hidden="true" class="h-3.5 w-3.5 rounded-full mr-2" xmlns="http://www.w3.org/2000/svg"
-                    id="flag-icon-css-de" viewBox="0 0 512 512">
-                    <path fill="#ffce00" d="M0 341.3h512V512H0z" />
-                    <path d="M0 0h512v170.7H0z" />
-                    <path fill="#d00" d="M0 170.7h512v170.6H0z" />
-                  </svg>
-                  Deutsch
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#"
-                class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-600"
-                role="menuitem">
-                <div class="inline-flex items-center">
-                  <svg aria-hidden="true" class="h-3.5 w-3.5 rounded-full mr-2" xmlns="http://www.w3.org/2000/svg"
-                    id="flag-icon-css-it" viewBox="0 0 512 512">
-                    <g fill-rule="evenodd" stroke-width="1pt">
-                      <path fill="#fff" d="M0 0h512v512H0z" />
-                      <path fill="#009246" d="M0 0h170.7v512H0z" />
-                      <path fill="#ce2b37" d="M341.3 0H512v512H341.3z" />
-                    </g>
-                  </svg>
-                  Italiano
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#"
-                class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:text-white dark:text-gray-300 dark:hover:bg-gray-600"
-                role="menuitem">
-                <div class="inline-flex items-center">
-                  <svg aria-hidden="true" class="h-3.5 w-3.5 rounded-full mr-2" xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink" id="flag-icon-css-cn" viewBox="0 0 512 512">
-                    <defs>
-                      <path id="a" fill="#ffde00" d="M1-.3L-.7.8 0-1 .6.8-1-.3z" />
-                    </defs>
-                    <path fill="#de2910" d="M0 0h512v512H0z" />
-                    <use width="30" height="20" transform="matrix(76.8 0 0 76.8 128 128)" xlink:href="#a" />
-                    <use width="30" height="20" transform="rotate(-121 142.6 -47) scale(25.5827)" xlink:href="#a" />
-                    <use width="30" height="20" transform="rotate(-98.1 198 -82) scale(25.6)" xlink:href="#a" />
-                    <use width="30" height="20" transform="rotate(-74 272.4 -114) scale(25.6137)" xlink:href="#a" />
-                    <use width="30" height="20" transform="matrix(16 -19.968 19.968 16 256 230.4)" xlink:href="#a" />
-                  </svg>
-                  中文 (繁體)
-                </div>
-              </a>
-            </li>
+  
           </ul>
+  
+          <!-- Second module -->
+          <ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
+  
+            <li>
+              <button id="coreBtn"
+                class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+                <svg aria-hidden="true"
+                  class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                  <path fill-rule="evenodd"
+                    d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                <span class="ml-3">Core Docs</span>
+              </button>
+            </li>
+
+            <li>
+              <button id="modalBtn"
+                class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+                <svg aria-hidden="true"
+                  class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                  <path fill-rule="evenodd"
+                    d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                <span class="ml-3">Modal Docs</span>
+              </button>
+            </li>
+
+            <li>
+              <button id="authBtn"
+                class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+                <svg aria-hidden="true"
+                  class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                  <path fill-rule="evenodd"
+                    d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                <span class="ml-3">Log in Docs</span>
+              </button>
+            </li>
+
+            <li>
+              <button id="playerBtn"
+                class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+                <svg aria-hidden="true"
+                  class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                  <path fill-rule="evenodd"
+                    d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                <span class="ml-3">Player Docs</span>
+              </button>
+            </li>
+
+            <li>
+              <button id="weathBtn"
+                class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+                <svg aria-hidden="true"
+                  class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                  <path fill-rule="evenodd"
+                    d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                <span class="ml-3">Weather Docs</span>
+              </button>
+            </li>
+  
+          </ul>
+  
         </div>
+  
+      </aside>
+  
+      <!-- Main content -->
+      <main class="p-4 md:ml-64 h-auto pt-14 mt-4">
 
-      </div>
-
-    </aside>
-
-    <!-- Main content -->
-    <main class="p-4 md:ml-64 h-auto pt-20 mt-4">
-
-      <!-- Two buckets -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4">
-
-        <!-- Audio -->
-        <div class="bg-white flex flex-col items-center p-2 rounded-lg shadow-lg h-80 md:h-96">
-
-          <div class="flex flex-col mt-2">
-            <h2 class="text-xl text-gray-900 font-semibold mb-2">Music Player</h2>
-            <div class="flex flex-col items-center">
-
-
-              <div class="" id="songCover">
-                <img class="h-24 rounded-xl w-24" src="https://audio-base-api.vercel.app/player/default-cover.png"
-                  alt="Default cover">
-              </div>
-
-              <div class="text-gray-900 mt-2 flex flex-col items-center">
-                <p class="text-sm" id="songTitle"></p>
-                <strong>
-                  <p class="text-sm" id="songArtist"></p>
-                </strong>
-              </div>
-
-              <audio style="width: 60%;" id="audioPlayer" class="flex items-center" controls>
-                <source id="audioSource" src="https://audio-base-api.vercel.app/player/track1.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-              </audio>
-
-
-            </div>
-
-            <label class="mt-2" for="#">Choose the song:</label>
-            <select id="songSelect" class="border mr-2 ml-2 rounded-lg py-2">
-            </select>
-
-            <div class="flex flex-row justify-between mt-4 mr-8 ml-8 mb-2">
-              <button id="prevButton" class="btn px-4 py-2 w-25 bg-purple-500 text-white rounded">Previous</button>
-              <!-- <button id="playButton" class="btn mr-2 px-4 py-2 bg-blue-500 text-white rounded">Play</button>
-              <button id="pauseButton" class="btn mr-2 px-4 py-2 bg-red-500 text-white rounded">Pause</button> -->
-              <button id="nextButton" class="btn px-4 py-2 w-25 bg-purple-500 text-white rounded">Next</button>
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- Weather -->
-        <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-80 md:h-96">
+        <!-- Title -->
+        <div id="mainTitle" class="bg-white component p-4 rounded-lg shadow-lg h-112 mb-4">
           <div class="mx-auto flex flex-col mt-2">
-
             <div class="flex flex-col items-center">
-
-              <div class="text-gray-900 mt-2 flex flex-col items-center">
-                <h3 class="text-lg text-gray-900 font-semibold mb-2">Weather</h3>
-                <div class="flex flex-col items-center">
-                  <span id="cityContainer" class="text-md text-gray-900 font-medium mb-1"></span>
-                  <div class="flex flex-row gap-3">
-                    <div class="mx-5" id="iconContainer"></div>
-                    <div class="mx-5">
-                      <div class="degree">
-                        <span class="text-gray-900 text-2xl font-bold" id="tempContainer"></span>
-                        <span class="text-gray-900 text-2xl font-bold">°C</span>
-                      </div>
-                      <div class="params flex flex-col">
-                        <span>Humidity: <strong id="humidityContainer"></strong>%</span>
-                        <span>Wind Speed: <strong id="windContainer"></strong> m/s</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+              <h1 id="shTitle" class="font-bold text-gray-900 text-2xl">My Smart Home</h1>
             </div>
-
           </div>
         </div>
 
-      </div>
+        <div class="doc">
+          <!-- Core -->
+          <div id="core" class="bg-white docs p-4 hidden rounded-lg shadow-lg h-112 mb-4">
+            <div class="container mx-auto px-4 py-8">
 
-      <!-- Four buckets -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+              <h1 class="text-3xl font-bold mb-4">Smart Home Core App Documentation</h1>
+          
+              <h2 class="text-xl font-semibold">Imported Elements</h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>
+          import { Lights, HeatingSystem, Lamp, TV, SmartHome } from './smart-elements.js';
+          import { AudioPlayer } from './player.js';
+          import { Weather } from './weather.js';
+          import { Burger } from './burger.js';
+          import { Modal } from './modal.js';
+          import { abi } from './contract/abi.js';
+              </code></pre>
+              <p class="mb-4">The core app imports various elements for creating a smart home system.</p>
+              <ul class="list-disc ml-8 mt-2">
+                <li>
+                  <code>Lights</code>: Represents the smart lights element.
+                </li>
+                <li>
+                  <code>HeatingSystem</code>: Represents the smart heating system element.
+                </li>
+                <li>
+                  <code>Lamp</code>: Represents the smart lamp element.
+                </li>
+                <li>
+                  <code>TV</code>: Represents the smart TV element.
+                </li>
+                <li>
+                  <code>SmartHome</code>: Represents the overall smart home system.
+                </li>
+                <li>
+                  <code>AudioPlayer</code>: Represents the music player element.
+                </li>
+                <li>
+                  <code>Weather</code>: Represents the weather element.
+                </li>
+                <li>
+                  <code>Burger</code>: Represents the burger menu element.
+                </li>
+                <li>
+                  <code>Modal</code>: Represents the modal element for authentication.
+                </li>
+                <li>
+                  <code>abi</code>: Represents the contract's ABI for interaction with the blockchain (You should provide this ABI
+                  as a value).
+                </li>
+              </ul>
+          
+              <h2 class="text-xl font-semibold mt-4">Instance Creation</h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>
+          // Create instances of the elements
+          const burger = new Burger();
+          const modal = new Modal(abi);
+          const lamp = new Lamp();
+          const tv = new TV();
+          const heatingSystem = new HeatingSystem();
+          const lights = new Lights();
+          const audioPlayer = new AudioPlayer();
+          const weather = new Weather();
+          const smartHome = new SmartHome();
+          
+          // Add components to the smart home system
+          smartHome.addComponent('lamp', lamp);
+          smartHome.addComponent('lights', lights);
+          smartHome.addComponent('tv', tv);
+          smartHome.addComponent('heating', heatingSystem);
+          smartHome.addComponent('player', audioPlayer);
+          smartHome.addComponent('weather', weather);
+              </code></pre>
+              <p class="mb-4">Create instances of the elements and add them as components to the smart home system.</p>
+          
+              <h2 class="text-xl font-semibold mt-4">Event Listeners</h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>
+          // Add event listeners to various elements
+          lightsToggle.onclick = () => {
+              lights.toggle();
+              localStorage.setItem('lightsState', JSON.stringify(lights));
+          };
+          
+          tvChannels.addEventListener('change', (event) => {
+              const selectedChannel = event.target.value;
+              tv.changeChannel(selectedChannel);
+              localStorage.setItem('tvState', JSON.stringify(tv));
+          });
+          
+          lampToggle.onclick = () => {
+              lamp.toggle();
+              localStorage.setItem('lampToggle', JSON.stringify(lamp));
+          };
+          
+          heatingSlider.addEventListener('input', (event) => {
+              const temperature = parseInt(event.target.value);
+              heatingSystem.setTemperature(temperature);
+              heatingTemp.textContent = `${temperature}°C`;
+              localStorage.setItem('heatingState', JSON.stringify(heatingSystem));
+          });
+          
+          prevButton.onclick = () => {
+              audioPlayer.playPreviousSong();
+          };
+          
+          nextButton.onclick = () => {
+              audioPlayer.playNextSong();
+          };
+          
+          songSelect.addEventListener('change', () => {
+              audioPlayer.showSongTags();
+              audioPlayer.playSelectedSong();
+              localStorage.setItem('audioPlayerState', JSON.stringify(audioPlayer));
+          });
+          
+          // Fetch weather data and show authentication modal on load
+          weather.getWeatherData();
+          modal.showAuthModal();
+          
+          // Trigger burger menu functionality
+          burger.burgerWork();
+          
+          // Update audio player and UI on window load
+          window.addEventListener('load', () => {
+              audioPlayer.showSongTags();
+              audioPlayer.updateSelectedSong();
+          
+              // Retrieve and update saved states from local storage
+              const savedTvState = localStorage.getItem('tvState');
+              // ... (similar for other elements)
+          });
+              </code></pre>
+              <p class="mb-4">Set event listeners to various elements and trigger actions accordingly.</p>
+          
+            </div>
+          </div>
 
-        <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg md:h-64">
-          <h2 class="text-lg font-semibold mb-2">TV</h2>
-          <div>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input id="tvToggle" type="checkbox" value="" class="sr-only peer">
-              <div
-                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
-              </div>
-              <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">TV</span>
-            </label>
-            <label class="block mt-4 font-semibold">Channels:</label>
-            <select id="tvChannels" class="border rounded-lg py-2">
-              <option value="Channel 1">ICTV</option>
-              <option value="Channel 2">1+1</option>
-              <option value="Channel 3">Discovery Chanel</option>
-            </select>
+          <!-- Authorisation docs -->
+          <div id="auth" class="bg-white docs p-4 hidden rounded-lg shadow-lg h-112 mb-4">
+            <div class="container mx-auto px-4 py-8">
+
+              <h1 class="text-3xl font-bold mb-4">AuthContract Class Documentation</h1>
+          
+              <h2 class="text-xl font-semibold">Constructor</h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>constructor(abi)</code></pre>
+              <p class="mb-4">Creates an instance of the AuthContract class.</p>
+              <ul class="list-disc ml-8 mt-2">
+                <li>
+                  <code>abi</code> (Array): The ABI (Application Binary Interface) of the Ethereum smart contract representing the
+                  authentication system.
+                </li>
+              </ul>
+          
+              <h2 class="text-xl font-semibold mt-4">Methods</h2>
+          
+              <h3 class="text-lg font-semibold">checkMetaMask()</h3>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>async checkMetaMask()</code></pre>
+              <p class="mb-4">Checks if MetaMask is installed and available in the user's browser.</p>
+              <ul class="list-disc ml-8 mt-2">
+                <li>Returns:
+                  <ul class="list-disc ml-8 mt-2">
+                    <li><code>true</code> if MetaMask is installed and available.</li>
+                    <li><code>false</code> if MetaMask is not installed or not available.</li>
+                  </ul>
+                </li>
+              </ul>
+          
+              <!-- Include documentation for other methods -->
+          
+              <h2 class="text-xl font-semibold mt-8">Usage Example</h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>
+          // Import the AuthContract class
+          import { AuthContract } from './AuthContract.js';
+          
+          // Initialize the AuthContract with the ABI of the smart contract
+          const authContract = new AuthContract(abi);
+          
+          // Connect the wallet and check login status
+          async function login() {
+            const isLoggedIn = await authContract.isUserLoggedIn();
+            if (!isLoggedIn) {
+              await authContract.connectWallet();
+            }
+          }
+          
+          // Change the house name
+          async function changeHouseName(newName) {
+            await authContract.changeHouseName(newName);
+          }
+          
+          // Retrieve and display the current house name
+          async function displayHouseName() {
+            await authContract.showHouseName();
+          }
+          
+          // Check if MetaMask is available
+          const isMetaMaskInstalled = authContract.checkMetaMask();
+          console.log('MetaMask Installed:', isMetaMaskInstalled);
+          </code></pre>
+              <p class="mb-4">Please make sure to add proper error handling and UI integration as per your project's
+                requirements.</p>
+          
+            </div>
+          </div>
+
+          <!-- Player docs -->
+          <div id="player" class="bg-white docs p-4 hidden rounded-lg shadow-lg h-112 mb-4">
+            <div class="container mx-auto px-4 py-8">
+
+              <h1 class="text-3xl font-bold mb-4">AudioPlayer Class Documentation</h1>
+          
+              <h2 class="text-xl font-semibold">Constructor</h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>constructor()</code></pre>
+              <p class="mb-4">Creates an instance of the AudioPlayer class.</p>
+              <ul class="list-disc ml-8 mt-2">
+                <li>
+                  <code>selectedSongIndex</code> (Number): The index of the currently selected song in the playlist.
+                </li>
+                <li>
+                  <code>playlist</code> (Array): An array containing the file names of the songs in the playlist.
+                </li>
+              </ul>
+          
+              <h2 class="text-xl font-semibold mt-4">Methods</h2>
+          
+              <h3 class="text-lg font-semibold">populateSongList()</h3>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>populateSongList()</code></pre>
+              <p class="mb-4">Populates the song select dropdown with options based on the playlist.</p>
+          
+              <h3 class="text-lg font-semibold">playSelectedSong()</h3>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>playSelectedSong()</code></pre>
+              <p class="mb-4">Plays the currently selected song in the playlist.</p>
+          
+              <h3 class="text-lg font-semibold">showSongTags()</h3>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>showSongTags()</code></pre>
+              <p class="mb-4">Displays the metadata tags (e.g., title, artist, cover image) of the currently selected song.</p>
+          
+              <h3 class="text-lg font-semibold">playPreviousSong()</h3>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>playPreviousSong()</code></pre>
+              <p class="mb-4">Plays the previous song in the playlist.</p>
+          
+              <h3 class="text-lg font-semibold">playNextSong()</h3>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>playNextSong()</code></pre>
+              <p class="mb-4">Plays the next song in the playlist.</p>
+          
+              <h3 class="text-lg font-semibold">updateSelectedSong()</h3>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>updateSelectedSong()</code></pre>
+              <p class="mb-4">Updates the currently selected song in the playlist and displays its metadata tags.</p>
+          
+              <h2 class="text-xl font-semibold mt-8">Usage Example</h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>
+          // Import the AudioPlayer class
+          import { AudioPlayer } from './AudioPlayer.js';
+          
+          // Initialize the AudioPlayer
+          const audioPlayer = new AudioPlayer();
+          
+          // Example of how to use the AudioPlayer methods
+          async function playSong() {
+            audioPlayer.playSelectedSong();
+          }
+          
+          function playNext() {
+            audioPlayer.playNextSong();
+          }
+          
+          function playPrevious() {
+            audioPlayer.playPreviousSong();
+          }
+          
+          function showTags() {
+            audioPlayer.showSongTags();
+          }
+          
+          </code></pre>
+              <p class="mb-4">Please make sure to add proper error handling and UI integration as per your project's
+                requirements.</p>
+          
+            </div>
+          </div>
+
+          <!-- Weather docs -->
+          <div id="weath" class="bg-white docs p-4 hidden rounded-lg shadow-lg h-112 mb-4">
+            <div class="container mx-auto px-4 py-8">
+
+              <h1 class="text-3xl font-bold mb-4">Weather Class Documentation</h1>
+          
+              <h2 class="text-xl font-semibold">Constructor</h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>constructor()</code></pre>
+              <p class="mb-4">Creates an instance of the Weather class.</p>
+              <ul class="list-disc ml-8 mt-2">
+                <li>
+                  <code>lat</code> (Number): The latitude of the current location.
+                </li>
+                <li>
+                  <code>lon</code> (Number): The longitude of the current location.
+                </li>
+                <li>
+                  <code>API_KEY</code> (String): The API key for accessing the OpenWeather API (You should provide this key as a
+                  value).
+                </li>
+              </ul>
+          
+              <h2 class="text-xl font-semibold mt-4">Methods</h2>
+          
+              <h3 class="text-lg font-semibold">setCoords()</h3>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>setCoords()</code></pre>
+              <p class="mb-4">Sets the latitude and longitude of the current location using the browser's geolocation API.</p>
+          
+              <h3 class="text-lg font-semibold">getWeatherData()</h3>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>getWeatherData()</code></pre>
+              <p class="mb-4">Fetches weather data for the current location from the OpenWeather API and displays it.</p>
+          
+              <h3 class="text-lg font-semibold">showTheWeather()</h3>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>showTheWeather()</code></pre>
+              <p class="mb-4">Displays the weather data (temperature, humidity, wind speed, city name, and weather icon) on the
+                webpage.</p>
+          
+              <h2 class="text-xl font-semibold mt-8">Usage Example</h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>
+          // Import the Weather class
+          import { Weather } from './Weather.js';
+          
+          // Initialize the Weather
+          const weather = new Weather();
+          
+          // Example of how to use the Weather methods
+          async function showWeather() {
+            await weather.getWeatherData();
+          }
+          
+          </code></pre>
+              <p class="mb-4">Please make sure to add proper error handling and UI integration as per your project's
+                requirements.</p>
+          
+            </div>
+          </div>
+
+          <!-- Modal docs -->
+          <div id="modal" class="bg-white docs p-4 hidden rounded-lg shadow-lg h-112 mb-4">
+            <div class="container mx-auto px-4 py-8">
+
+              <h1 class="text-3xl font-bold mb-4">Modal Class Documentation</h1>
+          
+              <h2 class="text-xl font-semibold">Imported Elements</h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>
+          import { AuthContract } from './contract/auth-contract.js';
+              </code></pre>
+              <p class="mb-4">The class imports the <code>AuthContract</code> element from the contract file.</p>
+          
+              <h2 class="text-xl font-semibold mt-4">Instance Creation</h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>
+          // Create an instance of the Modal class
+          const modal = new Modal(abi);
+              </code></pre>
+              <p class="mb-4">Create an instance of the <code>Modal</code> class by providing the ABI (Application Binary Interface) for
+                interacting with the smart contract.</p>
+          
+              <h2 class="text-xl font-semibold mt-4">Method: <code>showAuthModal()</code></h2>
+              <pre class="bg-gray-200 p-4 rounded-lg text-sm"><code>
+          showAuthModal() {
+              this.openModal.onclick = () => {
+                  this.authModal.classList.remove('hidden');
+                  this.body.classList.add('position-fixed');
+          
+                  this.authCloseModal.onclick = () => {
+                      this.authModal.classList.add('hidden');
+                      this.body.classList.remove('position-fixed');
+                  }
+          
+                  this.connectWallet.onclick = () => {
+                      if (this.authContract.isUserLoggedIn()) {
+                          this.authContract.connectWallet();
+                          this.connectionStatus.textContent = 'Connected';
+          
+                          this.authModal.classList.add('hidden');
+                          this.body.classList.remove('position-fixed');
+                      } else {
+                          alert('Connect the wallet');
+                      }
+                  }
+          
+                  this.changeHouseName.onclick = () => {
+                      this.authContract.changeHouseName(this.houseName.value);
+                      this.authContract.showHouseName();
+                  }
+              }
+          }
+              </code></pre>
+              <p class="mb-4">This method is responsible for showing the authentication modal and handling related actions.</p>
+              <ul class="list-disc ml-8 mt-2">
+                <li><code>this.openModal</code>: Represents the element that triggers the modal display.</li>
+                <li><code>this.authModal</code>: Represents the authentication modal element.</li>
+                <li><code>this.body</code>: Represents the body element of the document.</li>
+                <li><code>this.authCloseModal</code>: Represents the element for closing the authentication modal.</li>
+                <li><code>this.connectWallet</code>: Represents the element for connecting the wallet.</li>
+                <li><code>this.changeHouseName</code>: Represents the element for changing the house name.</li>
+                <li><code>this.houseName</code>: Represents the input element for entering the house name.</li>
+                <li><code>this.connectionStatus</code>: Represents the element to display the connection status.</li>
+                <li><code>this.authContract</code>: Represents an instance of the <code>AuthContract</code> class.</li>
+              </ul>
+          
+              <h2 class="text-xl font-semibold mt-4">Web3 Basics</h2>
+              <p class="mb-4">Web3 is a JavaScript library used to interact with the Ethereum blockchain. It allows developers to build
+                decentralized applications (DApps) and communicate with smart contracts on the blockchain.</p>
+              <ul class="list-disc ml-8 mt-2">
+                <li><b>ABI (Application Binary Interface):</b> The ABI is a JSON representation of a smart contract's functions and
+                  events. It defines how to interact with a smart contract from outside the blockchain. It acts as an interface
+                  between your application and the smart contract, allowing you to call functions and listen for events.</li>
+                <li><b>Window Object:</b> In the provided code, <code>window</code> is the global object in a web browser. It contains
+                  various properties and methods, including <code>window.ethereum</code>, which represents the user's Ethereum wallet
+                  (such as MetaMask) and provides access to the Ethereum blockchain.</li>
+                <li><b>Asynchronous Operations:</b> Many functions in Web3, such as <code>web3.eth.getAccounts()</code> and
+                  <code>contract.methods.isUserLoggedIn().call()</code>, return Promises. Promises are used for handling asynchronous
+                  operations, such as making HTTP requests and waiting for responses from the blockchain. The <code>async</code> and
+                  <code>await</code> keywords are used to work with Promises in a more readable and synchronous-like manner.</li>
+              </ul>
+          
+            </div>
           </div>
         </div>
-
-        <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
-          <h2 class="text-lg font-semibold mb-2">Heating System</h2>
-          <div>
-            <input id="heatingSlider" type="range" min="10" max="30" step="1" value="20" class="w-full" />
-            <p class="mt-2 font-semibold">Current Temperature: <span id="heatingTemp">20°C</span></p>
-          </div>
-        </div>
-
-        <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
-          <h2 class="text-lg font-semibold mb-2">Lights</h2>
-          <div>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input id="lightsToggle" type="checkbox" value="" class="sr-only peer">
-              <div
-                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
-              </div>
-              <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle lights</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
-          <h2 class="text-lg font-semibold mb-2">Alexa</h2>
-          <div>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input id="alexaToggle" type="checkbox" value="" class="sr-only peer">
-              <div
-                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
-              </div>
-              <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle Alexa</span>
-            </label>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Big bucket -->
-      <!-- <div class="bg-white p-4 rounded-lg shadow-lg h-112 mb-4">
-        <div class="mx-auto flex flex-col mt-2">
-
-          <div class="flex flex-col items-center">
-
-            <div class="text-gray-900 mt-2 flex flex-col items-center">
-              <h3 class="text-lg text-gray-900 font-semibold mb-2">Weather</h3>
+  
+        <!-- Two buckets -->
+        <div class="component grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-4">
+  
+          <!-- Audio -->
+          <div class="bg-white flex flex-col justify-center items-center p-2 rounded-lg shadow-lg h-80 md:h-96">
+            <h2 class="text-xl text-gray-900 font-semibold mx-auto lg:mb-8">Music Player</h2>
+            <div class="flex flex-col lg:flex-row mt-2">
+              
               <div class="flex flex-col items-center">
-                <span id="cityContainer" class="text-md text-gray-900 font-medium mb-1"></span>
-                <div class="flex flex-row gap-3">
-                  <div class="mx-5" id="iconContainer"></div>        
-                  <div class="mx-5">
-                    <div class="degree">
-                      <span class="text-gray-900 text-2xl font-bold" id="tempContainer"></span>
-                      <span class="text-gray-900 text-2xl font-bold">°C</span>
-                    </div>
-                    <div class="params flex flex-col">
-                      <span>Humidity: <strong id="humidityContainer"></strong>%</span>
-                      <span>Wind Speed: <strong id="windContainer"></strong> m/s</span>
+  
+  
+                <div class="" id="songCover">
+                  <img class="h-24 rounded-xl w-24" src="https://audio-base-api.vercel.app/player/default-cover.png"
+                    alt="Default cover">
+                </div>
+  
+                <div class="text-gray-900 flex flex-col items-center">
+                  <p class="text-sm" id="songTitle"></p>
+                  <strong>
+                    <p class="text-sm" id="songArtist"></p>
+                  </strong>
+                </div>
+  
+                <audio style="width: 250px;" id="audioPlayer" class="flex items-center" controls>
+                  <source id="audioSource" src="https://audio-base-api.vercel.app/player/track1.mp3" type="audio/mpeg">
+                  Your browser does not support the audio element.
+                </audio>
+  
+  
+              </div>
+  
+              <div class="flex flex-col">
+                <div class="flex flex-col items-center">
+                  <label class="mt-2 mx-auto" for="#">Choose the song:</label>
+                  <select id="songSelect" class="border mt-1 mr-2 ml-2 w-48 rounded-lg py-2"></select>
+                </div>
+  
+                <div class="hidden md:flex md:visible md:flex-row md:justify-between mt-4 mr-4 ml-4 mb-2">
+                  <button id="prevButton" class="btn flex justify-center px-4 py-2 w-20 bg-blue-600 hover:bg-blue-700 text-white rounded">
+                    <span class="">Previous</span>
+                  </button>
+                  <!-- <button id="playButton" class="btn mr-2 px-4 py-2 bg-blue-500 text-white rounded">Play</button>
+                  <button id="pauseButton" class="btn mr-2 px-4 py-2 bg-red-500 text-white rounded">Pause</button> -->
+                  <button id="nextButton" class="btn px-4 py-2 w-20 bg-blue-600 hover:bg-blue-700 text-white rounded">
+                    <span>Next</span>
+                  </button>
+                </div>
+              </div>
+  
+            </div>
+  
+          </div>
+  
+          <!-- Weather -->
+          <div class="bg-white flex flex-col items-center justify-center p-4 rounded-lg shadow-lg h-80 md:h-96">
+            <div class="mx-auto flex flex-col mt-2">
+  
+              <div class="flex flex-col items-center">
+  
+                <div class="text-gray-900 flex flex-col items-center">
+                  <h2 class="text-xl text-gray-900 font-semibold mb-1 lg:mb-8">Weather</h2>
+                  <div class="flex flex-col items-center">
+                    <span id="cityContainer" class="text-md text-gray-900 font-medium mb-1"></span>
+                    <div class="flex flex-col md:flex-row gap-3">
+                      <div class="px-6 py-6 bg-slate-400 rounded-xl shadow-lg mx-auto" id="iconContainer"></div>
+                      <div class="mx-5 flex flex-col justify-center">
+                        <div class="degree">
+                          <span class="text-gray-900 text-2xl font-bold" id="tempContainer"></span>
+                          <span class="text-gray-900 text-2xl font-bold">°C</span>
+                        </div>
+                        <div class="params flex flex-col">
+                          <span>Humidity: <strong id="humidityContainer"></strong>%</span>
+                          <span>Wind Speed: <strong id="windContainer"></strong> m/s</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+  
+              </div>
+  
+            </div>
+          </div>
+  
+        </div>
+
+        <!-- Voice helper -->
+        <div class="component bg-white p-4 rounded-lg shadow-lg h-112 mb-4">
+
+          <h3 class="mb-5 text-lg font-semibold text-gray-900 dark:text-white">Choose voice helper you need:</h3>
+          <ul class="grid w-full gap-6 md:grid-cols-3">
+              <li>
+                  <input type="checkbox" id="alexaOption" value="" class="hidden peer" required="">
+                  <label for="alexaOption" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                      <div class="block">
+                          <img class="mb-2 w-7 h-7 text-sky-500" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Amazon_Alexa_blue_logo.svg/1200px-Amazon_Alexa_blue_logo.svg.png" alt="Alexa logo">
+                          <div class="w-full text-lg font-semibold">Alexa</div>
+                          <div class="w-full text-sm">A voice helper from world-known Amazon.</div>
+                      </div>
+                  </label>
+              </li>
+
+              <li>
+                <input type="checkbox" id="assistantOption" value="" class="hidden peer">
+                <label for="assistantOption" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                    <div class="block">
+                        <img class="mb-2 w-7 h-7 text-sky-500" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Google_Assistant_logo.svg/1024px-Google_Assistant_logo.svg.png" alt="Assistant logo">
+                        <div class="w-full text-lg font-semibold">Google Assistant</div>
+                        <div class="w-full text-sm">Home assistant integrated with other Google devices.</div>
+                    </div>
+                </label>
+              </li>
+
+              <li>
+                  <input type="checkbox" id="siriOption" value="" class="hidden peer">
+                  <label for="siriOption" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                      <div class="block">
+                        <img class="mb-2 w-7 h-7 text-sky-500" src="https://images.squarespace-cdn.com/content/v1/5975081a5016e132ff009cd1/1542169667399-CZHJ6O3FNRS69JJBH2L7/Siri+icon.png?format=1500w" alt="Siri logo">
+                          <div class="w-full text-lg font-semibold">Siri</div>
+                          <div class="w-full text-sm">Apple native voice helper integrated with all devices.</div>
+                      </div>
+                  </label>
+              </li>
+
+          </ul>
+
+        </div>
+  
+        <!-- Four buckets -->
+        <div class="component grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+  
+          <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg md:h-64">
+            <h2 class="text-lg font-semibold mb-2">TV</h2>
+            <div class="mt-8">
+              <div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input id="tvToggle" type="checkbox" value="" class="sr-only peer">
+                  <div
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                  </div>
+                  <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle TV</span>
+                </label>
+                <label class="block mt-4 font-semibold">Channels:</label>
+                <select id="tvChannels" class="border mt-1 mr-2 ml-2 w-48 rounded-lg py-2">
+                  <option value="Channel 1">ICTV</option>
+                  <option value="Channel 2">1+1</option>
+                  <option value="Channel 3">Novy Chanel</option>
+                  <option value="Channel 3">CNN</option>
+                  <option value="Channel 3">Fox News</option>
+                </select>
               </div>
             </div>
-
+          </div>
+  
+          <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
+            <h2 class="text-lg font-semibold mb-2">Heating System</h2>
+            <div class="mt-12">
+              <input id="heatingSlider" type="range" min="10" max="30" step="1" value="20" class="w-full" />
+              <p class="mt-2 font-semibold">Current Temperature: <span id="heatingTemp">20°C</span></p>
+            </div>
+          </div>
+  
+          <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
+            <h2 class="text-lg font-semibold mb-2">Bulbs</h2>
+            <div class="mt-14">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input id="lightsToggle" type="checkbox" value="" class="sr-only peer">
+                <div
+                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                </div>
+                <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle Bulbs</span>
+              </label>
+            </div>
           </div>
 
-
-        </div>
-      </div> -->
-
-      <!-- Four buckets -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-
-        <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
-          <h2 class="text-lg font-semibold mb-2">Lamp</h2>
-          <div>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input id="lampToggle" type="checkbox" value="" class="sr-only peer">
-              <div
-                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
-              </div>
-              <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Lamp</span>
-            </label>
+          <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
+            <h2 class="text-lg font-semibold mb-2">Bra</h2>
+            <div class="mt-14">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input id="lampToggle" type="checkbox" value="" class="sr-only peer">
+                <div
+                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                </div>
+                <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle Bra</span>
+              </label>
+            </div>
           </div>
+  
         </div>
-
-        <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
-
-        </div>
-
-        <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
-
-        </div>
-
-        <div class="bg-white flex flex-col items-center p-4 rounded-lg shadow-lg h-32 md:h-64">
-
-        </div>
-
-      </div>
-
-      <!-- Four buckets -->
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-        <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-        <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-        <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-      </div>
-
-
-    </main>
-
+  
+      </main>
+  
   </div>
 
   <script src="src/components/env.js"></script>

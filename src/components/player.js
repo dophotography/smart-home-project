@@ -33,14 +33,19 @@ class AudioPlayer {
     }
   
     playSelectedSong() {
-      this.selectedSongIndex = songSelect.value;
-      if (this.selectedSongIndex >= 0 && this.selectedSongIndex < this.playlist.length) {
-        audioPlayer.src = `https://audio-base-api.vercel.app/player/${this.playlist[this.selectedSongIndex]}`
-        const playPromise = audioPlayer.play()
-        if (playPromise !== null) {
-            playPromise.catch(() => { })
+        try {
+            this.selectedSongIndex = songSelect.value;
+            if (this.selectedSongIndex >= 0 && this.selectedSongIndex < this.playlist.length) {
+              audioPlayer.src = `https://audio-base-api.vercel.app/player/${this.playlist[this.selectedSongIndex]}`
+              const playPromise = audioPlayer.play()
+              if (playPromise !== null) {
+                  playPromise.catch(() => { })
+              }
+            }
+        } catch(err) {
+            console.warn('Error while loading songs:', err)
         }
-      }
+
     }
     
     showSongTags() {

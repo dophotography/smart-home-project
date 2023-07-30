@@ -1,15 +1,16 @@
-// app.js
-import { Lights, HeatingSystem, Lamp, TV, Alexa, SmartHome } from './smart-elements.js';
+import { Lights, HeatingSystem, Lamp, TV, SmartHome } from './smart-elements.js';
 import { AudioPlayer } from './player.js'
 import { Weather } from './weather.js'
 import { Burger } from './burger.js'
 import { Modal } from './modal.js'
+import { Documentation } from './docs.js';
+import { abi } from './contract/abi.js' 
 
 const burger = new Burger()
-const modal = new Modal()
+const modal = new Modal(abi)
+const doc = new Documentation()
 
 const lamp = new Lamp()
-const alexa = new Alexa()
 const tv = new TV()
 const heatingSystem = new HeatingSystem()
 const lights = new Lights()
@@ -19,14 +20,13 @@ const weather = new Weather()
 const smartHome = new SmartHome()
 
 smartHome.addComponent('lamp', lamp)
-smartHome.addComponent('alexa', alexa)
 smartHome.addComponent('lights', lights)
 smartHome.addComponent('tv', tv)
 smartHome.addComponent('heating', heatingSystem)
 smartHome.addComponent('player', audioPlayer)
 smartHome.addComponent('weather', weather)
 
-weather.getWeatherData()
+
 
 lightsToggle.onclick = () => {
     lights.toggle()
@@ -38,11 +38,6 @@ tvChannels.addEventListener('change', (event) => {
     tv.changeChannel(selectedChannel)
     localStorage.setItem('tvState', JSON.stringify(tv))
 })
-
-alexaToggle.onclick = () => {
-    alexa.toggle()
-    localStorage.setItem('alexaState', JSON.stringify(lights))
-}
 
 lampToggle.onclick = () => {
     lamp.toggle()
@@ -57,28 +52,29 @@ heatingSlider.addEventListener('input', (event) => {
 })
 
 prevButton.onclick = () => {
-    setTimeout(() => audioPlayer.playPreviousSong(), 1000)
+    audioPlayer.playPreviousSong()
 }
 
 nextButton.onclick = () => {
-    setTimeout(() => audioPlayer.playNextSong(), 1000)
+    audioPlayer.playNextSong()
 }
 
 songSelect.addEventListener('change', () => {
     audioPlayer.showSongTags()
-    setTimeout(() => audioPlayer.playSelectedSong(), 1000)
+    audioPlayer.playSelectedSong()
     localStorage.setItem('audioPlayerState', JSON.stringify(audioPlayer))
 })
 
+weather.getWeatherData()
+modal.showAuthModal()
 burger.burgerWork()
-
-modal.showLoginModal()
-
+doc.listenForClicks()
 
 window.addEventListener('load', () => {
-
     audioPlayer.showSongTags()
-    setTimeout(() => audioPlayer.updateSelectedSong(), 1000)
+    audioPlayer.updateSelectedSong()
+
+
     
     const savedTvState = localStorage.getItem('tvState')
     if (savedTvState) {
@@ -92,13 +88,6 @@ window.addEventListener('load', () => {
         const audioPlayerState = JSON.parse(savedAudioPlayerState)
         audioPlayer.selectedSongIndex = audioPlayerState.selectedSongIndex
         audioPlayer.updateSelectedSong()
-    }
-
-    const savedAlexaState = localStorage.getItem('alexaState')
-    if(savedAlexaState) {
-        const alexaState = JSON.parse(savedAlexaState)
-        alexa.isOn = alexaState.isOn
-        alexa.updateUI()
     }
 
     const savedLampState = localStorage.getItem('lampState')

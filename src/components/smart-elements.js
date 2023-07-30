@@ -1,26 +1,3 @@
-class Alexa {
-    constructor() {
-        this.isOn = false
-    }
-
-    toggle() {
-        this.isOn = !this.isOn
-        this.updateUI()
-    }
-
-    updateUI() {
-        if (this.isOn) {
-            alexaToggle.textContent = 'Turn Off Alexa'
-            alexaToggle.classList.add('bg-red-500')
-            alexaToggle.classList.remove('bg-blue-500')
-        } else {
-            alexaToggle.textContent = 'Turn On Alexa'
-            alexaToggle.classList.add('bg-blue-500')
-            alexaToggle.classList.remove('bg-red-500')
-        }
-    }
-}
-
 class Lamp {
     constructor() {
         this.isOn = false
@@ -84,9 +61,7 @@ class TV {
         this.updateUI()
     }
 
-    updateUI() {
-        
-    }
+    updateUI() {}
 }
   
 class HeatingSystem {
@@ -117,13 +92,9 @@ class HeatingSystem {
         }
     }
 
-    updateUI() {
-      
-    }
+    updateUI() {}
 }
 
-  
-  //Alarm
   
 class SmartHome {
     constructor() {
@@ -143,5 +114,5 @@ class SmartHome {
     }
 }
   
-export { Lights, TV, HeatingSystem, SmartHome, Lamp, Alexa }
+export { Lights, TV, HeatingSystem, SmartHome, Lamp }
   
