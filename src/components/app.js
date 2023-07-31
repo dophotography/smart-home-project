@@ -7,7 +7,7 @@ import { Documentation } from './docs.js';
 import { abi } from './contract/abi.js' 
 
 const burger = new Burger()
-const modal = new Modal(abi)
+const modal = new Modal(abi, window.CONTRACT_ADDRESS)
 const doc = new Documentation()
 
 const lamp = new Lamp()
@@ -73,8 +73,6 @@ doc.listenForClicks()
 window.addEventListener('load', () => {
     audioPlayer.showSongTags()
     audioPlayer.updateSelectedSong()
-
-
     
     const savedTvState = localStorage.getItem('tvState')
     if (savedTvState) {

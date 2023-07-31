@@ -1,98 +1,103 @@
 class AuthContract {
-    constructor(abi) {
+    static sender = null
+    constructor(abi, address) {
         this.abi = abi
-        this.contractAddress = '0x0fB3c24bfE5C57298E3019CD3A6367D779919B04'
-        this.web3 = new Web3(window.ethereum)
+        this.contractAddress = address
+        this.web3 = null
+        this.contract = null
     }
 
-    async checkMetaMask() {
-        if(typeof window.ethereum === 'undefined') {
-            alert('Install MetaMask to use this app')
+    async initWeb3() {
+        if (window.ethereum) {
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' })
+                this.web3 = new Web3(window.ethereum)
+            } catch (error) {
+                console.warn('Error while connecting to MetaMask:', error)
+                return false
+            }
+        } else if (window.web3) {
+            this.web3 = new Web3(window.web3.currentProvider)
+        } else {
+            console.warn('No Ethereum provider detected. Please install MetaMask or use a DApp browser.')
             return false
         }
+
+        this.contract = new this.web3.eth.Contract(this.abi, this.contractAddress)
         return true
     }
 
-    contractQuery() {
-        return new this.web3.eth.Contract(this.abi, this.contractAddress)
-    }
-
     async connectWallet() {
-        if (!(await this.checkMetaMask())) {
+        if (!this.web3) {
+            console.error('Web3 not initialized. Call initWeb3() first.')
             return
         }
-      
+    
         try {
             const accounts = await this.web3.eth.getAccounts()
-            const sender = accounts[0]
-
-            const isLoggedIn = await this.contractQuery().methods.isUserLoggedIn().call()
-
-            if (!isLoggedIn) {
-                await this.contractQuery().methods.connectWallet().send({ from: sender })
+            if (accounts.length === 0) {
+                alert('Please connect your wallet to proceed.')
+                return
             }
-            console.log(`You are succesfully logged in, ${sender}`)
-        
+            this.sender = accounts[0]
+
+            await this.contract.methods.connectWallet().send({ from: this.sender });
+            connectionStatus.textContent = 'Connected'
+
+            alert('Wait a few second for application to connect the blockchain...')
+            console.log(`You are successfully logged in, ${this.sender}`)
+            return true
         } catch (error) {
             console.warn('Error while connecting wallet:', error)
             alert('Error while connecting wallet.')
+            return false
         }
-    }
+    }    
 
-    async changeHouseName(newHouseName) {
-        console.log(newHouseName)
-        if (!newHouseName) {
-            alert('Please provide a valid name.')
+    async setHouseName(houseName) {
+        if (!this.web3) {
+            console.error('Web3 not initialized. Call initWeb3() first.')
             return
         }
-        
+    
         try {
-            const accounts = await this.web3.eth.getAccounts()
-            const sender = accounts[0]
-            const gasLimit = 300000
-
-            await this.contractQuery().methods.setHouseName(newHouseName).send({ from: sender, gas: gasLimit })
-
-            shTitle.textContent = newHouseName
+            await this.contract.methods.setHouseName(houseName).send({ from: this.sender })
+            alert('Wait a few second for transaction to complete...')
         } catch (error) {
-            console.warn('Error while changing house name:', error)
-            alert('Error while changing house name.')
-        }
-    }
-
-    async showHouseName() {
-        if (!(await this.checkMetaMask())) {
-            return
-        }
-        
-        try {
-            const houseName = await this.contractQuery().methods.getHouseName().call()
-            console.log(houseName)
-
-            // shTitle.textContent = houseName
-        } catch (err) {
-            console.warn('Error while getting house name:', err)
-            alert('Error while getting house name.')
+            console.error('Error while setting house name:', error)
+            if(typeof this.sender === 'undefined' || this.sender === null) {
+                alert('You should connect your wallet first!')
+            }
         }
     }
 
     async isUserLoggedIn() {
-        if (!(await this.checkMetaMask())) {
-          return
+        if (!this.web3) {
+            console.error('Web3 not initialized. Call initWeb3() first.')
+            return false
         }
-      
+    
         try {
-            const isLoggedIn = await this.contractQuery().methods.isUserLoggedIn().call()
-            if (isLoggedIn) {
-                console.log('User is logged in.')
-                return true
-            } else {
-                console.log('User is not logged in. Connect your wallet.')
-                return false
-            }
-        } catch (err) {
-            console.warn('Error while getting login status: ', err)
-            alert('Error while getting login status.')
+            const isLoggedIn = await this.contract.methods.isUserLoggedIn().call({ from: this.sender })
+            return isLoggedIn
+        } catch (error) {
+            console.error('Error while checking login status:', error)
+            return false
+        }
+    }
+
+    async getHouseName() {
+        if (!this.web3) {
+            console.error('Web3 not initialized. Call initWeb3() first.')
+            return
+        }
+    
+        try {
+            const houseName = await this.contract.methods.getHouseName().call({ from: this.sender })
+            shTitle.textContent = `${houseName}`
+        } catch (error) {
+            console.error('Error while getting house name:', error)
+            return
         }
     }
 
